@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  se15_app:
+    container_name: 'se15_app'
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./backend/
+    environment:
+      - API_VERSION=${API_VERSION}
+      - CSV_FILE_NAME=${CSV_FILE_NAME}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - DEBUG=${DEBUG}
+      - BACKEND_SERVER_HOST=${BACKEND_SERVER_HOST}
+      - BACKEND_SERVER_PORT=${BACKEND_SERVER_PORT}
+      - BACKEND_SERVER_WORKERS=${BACKEND_SERVER_WORKERS}
+      - IS_ALLOWED_CREDENTIALS=${IS_ALLOWED_CREDENTIALS}
+      - ASSET_DIR_NAME=${ASSET_DIR_NAME}
+      - CLIENT_ORIGIN_LOCALHOST=${CLIENT_ORIGIN_LOCALHOST}
+      - CLIENT_ORIGIN_DOCKER=${CLIENT_ORIGIN_DOCKER}
+      - CLIENT_METHOD=${CLIENT_METHOD}
+      - CLIENT_HEADER=${CLIENT_HEADER}
+      - API_KEY=${API_KEY}
+      - CSV_DIR_NAME=${CSV_DIR_NAME}
+      - ELEMENT_TYPE_DIR_NAME=${ELEMENT_TYPE_DIR_NAME}
+      - ML_MODEL_DIR_NAME=${ML_MODEL_DIR_NAME}
+      - ML_LOCAL_MODEL_NAME=${ML_LOCAL_MODEL_NAME}
+    volumes:
+      - ./backend/:/usr/backend/
+    expose:
+      - 8000
+    ports:
+      - 8001:8000

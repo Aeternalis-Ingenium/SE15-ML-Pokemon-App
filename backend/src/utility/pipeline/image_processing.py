@@ -23,25 +23,18 @@ def image_to_array(image) -> np.ndarray:
         # add white background
         white_bg = PillowImage.new(mode="RGBA", size=image.size, color=(255, 255, 255))
         image = PillowImage.alpha_composite(im1=white_bg, im2=image)
-
-    # normalize to values between 0 and 1
-    data = np.array(object=image)
-    data = data.astype(dtype=np.float32) / 255
-
-    # Invert colors
-    data = 1 - data
-
-    # Remove fourth channel, if it exists
-    return data[:, :, :3]
+    image_as_array = np.array(object=image)
+    image_as_array = image_as_array.astype(dtype=np.float32) / 255
+    image_as_array = 1 - image_as_array
+    return image_as_array[:, :, :3]
 
 
 def reshape_image_dimension(image: np.ndarray, ml_library: str, nn_type: str | None) -> np.ndarray:
+    reshaped_image = np.expand_dims(image, axis=0)
     if ml_library == MLModelLibrary.TF:
-        if nn_type == NNArchitecture.ANN:
-            return image.reshape(image.shape[0], image.shape[1] * image.shape[2] * image.shape[3])
-        reshaped_image = np.expand_dims(image, axis=0)
-        return np.expand_dims(reshaped_image, axis=-1)
-    return image.reshape(1, -1)
+        if nn_type == NNArchitecture.CNN:
+            return reshaped_image
+    return image.reshape(reshaped_image.shape[0], reshaped_image[1] * reshaped_image[2] * reshaped_image[3])
 
 
 def prepare_image(image, ml_library: str, nn_type: str | None) -> np.ndarray:

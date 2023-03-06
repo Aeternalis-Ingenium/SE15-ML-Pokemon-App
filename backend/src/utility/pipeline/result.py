@@ -1,21 +1,11 @@
-import numpy as np
-import pandas as pd
-
-from src.config.settings import settings
 from src.utility.enum.element_types import PokemonElementTypes
+from src.utility.verification.pokemon import get_pokemon_table, get_verified_pokemon_name
 
 
-def get_pokemon_table():
-    df = pd.read_csv(filepath_or_buffer=settings.POKEMON_CSV)
-    df = df.replace(to_replace=np.NaN, value=None)
-    df["Type1"] = df["Type1"].apply(lambda value: value.lower() if value != None else None)  # type: ignore
-    df["Type2"] = df["Type2"].apply(lambda value: value.lower() if value != None else None)  # type: ignore
-    return df
-
-
-async def interpret_prediction(prediction: list, pokemon_name) -> tuple[str, str | None, str, str | None, bool]:
+async def interpret_prediction(prediction: list, pokemon_name) -> tuple[str, str, str | None, str, str | None, bool]:
     pokemon_table = get_pokemon_table()
-    pokemon = pokemon_table[pokemon_table["Name"] == pokemon_name.lower()]
+    verified_pokemon_name = get_verified_pokemon_name(df=pokemon_table, pokemon_name=pokemon_name)
+    pokemon = pokemon_table[pokemon_table["Name"] == verified_pokemon_name]
     predicted_element_types = list()
     actual_element_types = pokemon.values[0].tolist()[1:]
 
@@ -25,12 +15,15 @@ async def interpret_prediction(prediction: list, pokemon_name) -> tuple[str, str
                 if idx == element_type.value:
                     predicted_element_types.append(str(element_type.name).lower())
 
-    if len(predicted_element_types) == 1:
+    if len(predicted_element_types) == 0:
+        raise Exception(f"Your ML model didn't have any True prediction! Try to adjust the `prediction threshold`")
+    elif len(predicted_element_types) == 1:
         predicted_element_types.append(None)  # type: ignore
 
     is_prediction_correct = predicted_element_types == actual_element_types
 
     return (
+        verified_pokemon_name,
         predicted_element_types[0],
         predicted_element_types[-1],
         actual_element_types[0],

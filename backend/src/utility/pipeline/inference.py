@@ -7,7 +7,7 @@ from src.utility.pipeline.ml import model_predict
 async def inference_pipeline(
     pokemon_image_as_bytes,
     ml_model_as_bytes,
-    threshold: float,
+    threshold: float | None,
     ml_library: str,
     nn_type: str | None,
     custom_objects: dict | None = None,

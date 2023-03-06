@@ -4,10 +4,10 @@ from src.schema.ml_model import UploadMLModelInResponse
 from src.schema.pokemon import UploadPokemonInResponse
 from src.utility.file.verification import verify_file_extension
 
-router = fastapi.APIRouter(prefix="/upload", tags=["upload"])
+router = fastapi.APIRouter(prefix="/se15", tags=["upload"])
 
 
-@router.post(path="/pokemon", response_model=UploadPokemonInResponse, status_code=fastapi.status.HTTP_200_OK)
+@router.post(path="/upload/pokemon", response_model=UploadPokemonInResponse, status_code=fastapi.status.HTTP_200_OK)
 async def upload_pokemon_image(
     file: fastapi.UploadFile,
 ) -> UploadPokemonInResponse:
@@ -19,7 +19,7 @@ async def upload_pokemon_image(
     return UploadPokemonInResponse(**data)
 
 
-@router.post(path="/ml-model", response_model=UploadMLModelInResponse, status_code=fastapi.status.HTTP_200_OK)
+@router.post(path="/upload/ml-model", response_model=UploadMLModelInResponse, status_code=fastapi.status.HTTP_200_OK)
 async def upload_ml_model(
     file: fastapi.UploadFile,
 ) -> UploadMLModelInResponse:

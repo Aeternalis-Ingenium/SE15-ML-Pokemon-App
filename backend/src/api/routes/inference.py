@@ -44,6 +44,7 @@ async def predict_pokemon(
             nn_type=nn_type,
         )
     data["prediction"] = prediction  # type: ignore
+    data["pokemon_name"] = pokemon_name.lower()
     (
         data["predicted_element_type_1"],
         data["predicted_element_Type_2"],

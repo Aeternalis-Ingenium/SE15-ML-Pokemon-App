@@ -1,5 +1,5 @@
 default_install_hook_types: [pre-commit]
-default_stages: [commit, push]
+default_stages: [pre-commit, pre-push]
 default_language_version:
   python: python3.10
 ci:
@@ -13,28 +13,28 @@ ci:
     submodules: false
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v5.0.0
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
         files: ^backend/
 -   repo: https://github.com/psf/black
-    rev: 23.1.0
+    rev: 24.10.0
     hooks:
     -   id: black
         language_version: python3.10
         args:
         - --config=backend/pyproject.toml
 -   repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+    rev: 5.13.2
     hooks:
     -   id: isort
         name: isort (python)
         args:
         - --settings-path=backend/pyproject.toml
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: "v1.0.0"
+    rev: "v1.11.2"
     hooks:
     -   id: mypy
         args:
